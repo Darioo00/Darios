@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bottone Dispettoso</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f4f4f9;
+            /* overflow: hidden evita che compaiano le fastidiose barre di scorrimento laterali */
+            overflow: hidden; 
+        }
+        
+        #bottoneDispettoso {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #dc3545;      /* Bottone rosso per farlo sembrare una sfida! */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            
+            /* Queste due righe sono la magia per poterlo muovere */
+            position: absolute;
+            
+            /* Lo posizioniamo al centro all'inizio */
+            left: 50%;
+            top: 50%;
+            
+            /* Aggiunge una piccola animazione per farlo scappare in modo fluido */
+            transition: top 0.15s, left 0.15s; 
+        }
+
+            #bottoneVero {
+                padding: 10px 20px;
+                font-size: 16px;
+                background-color: #28a745;      /* Bottone verde per il "SI" */
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-right: 20px; /* Spazio tra i due bottoni */
+            }
+        
+    </style>
+</head>
+<body>
+
+    <h1>Vuoi uscire con me?</h1>
+    
+    <button id="bottoneVero">SI</button>
+    <button id="bottoneDispettoso">NO</button>
+
+    <script>
+        const bottone = document.getElementById('bottoneDispettoso');
+
+        // Ascoltiamo l'evento "mouseover" (quando il mouse entra nell'area del bottone)
+        bottone.addEventListener('mouseover', function() {
+            
+            // Calcoliamo lo spazio disponibile sullo schermo
+            // Sottraiamo un po' di pixel per evitare che il bottone finisca mezza fuori dallo schermo
+            const larghezzaSchermo = window.innerWidth - 150;
+            const altezzaSchermo = window.innerHeight - 50;
+            
+            // Generiamo coordinate X (sinistra) e Y (alto) completamente a caso
+            // Math.random() genera un numero tra 0 e 1, che moltiplichiamo per lo spazio disponibile
+            const nuovaPosizioneX = Math.floor(Math.random() * larghezzaSchermo);
+            const nuovaPosizioneY = Math.floor(Math.random() * altezzaSchermo);
+            
+            // Applichiamo le nuove coordinate al bottone
+            bottone.style.left = nuovaPosizioneX + 'px';
+            bottone.style.top = nuovaPosizioneY + 'px';
+        });
+
+        // Nel rarissimo caso in cui tu riesca a cliccarlo (magari usando la tastiera o essendo un ninja)
+        bottone.addEventListener('click', function() {
+            alert("Incredibile! Sei riuscito a prenderlo! 🏆");
+        });
+    </script>
+
+
+    <!-- Aggiungiamo la libreria dei confetti (puoi anche scaricarla e includerla localmente) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+   const bottone2 = document.getElementById('bottoneVero');
+
+        bottone2.addEventListener('click', () => {
+            
+            // --- Configurazione della festa ---
+
+            // A. I Coriandoli Classici (un'esplosione centrale)
+            confetti({
+                particleCount: 80, // Leggermente meno per non coprire i cuori
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            // B. I Cuoricini (Usando l'emoji - MOLTO PIÙ AFFIDABILE)
+            
+            // Definiamo una forma speciale partendo da un testo (l'emoji)
+            // 'scalar: 2' rende l'emoji grande il doppio del normale
+            const formaCuore = confetti.shapeFromText({ text: '❤️', scalar: 2 });
+
+            // Chiamiamo il lancio dei cuori
+            confetti({
+                particleCount: 40,    // Meno particelle ma più grandi
+                spread: 100,          // Lancio più ampio
+                origin: { y: 0.7 },   // Partono un po' più in basso
+                shapes: [formaCuore], // Usiamo la nostra forma emoji!
+                // Per le emoji, la proprietà 'colors' spesso non serve o 
+                // altera solo l'ombra, lasciamo l'emoji originale rossa.
+            });
+        });
+    </script>
+</body>
+</html>
