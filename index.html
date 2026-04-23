@@ -62,33 +62,30 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
     <script>
-        const bottone2 = document.getElementById('bottoneVero');
+const bottone2 = document.getElementById('bottoneVero');
 
-        bottone2.addEventListener('click', () => {
-            // Effetto coriandoli base
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ff0000', '#fe019a', '#ffcccb']
-            });
+bottone2.addEventListener('click', () => {
+    
+    // 1. Esplosione di coriandoli normali
+    confetti({
+        particleCount: 70,
+        spread: 70,
+        origin: { y: 0.6 }
+    });
 
-            // Effetto CUORI (Funziona solo con versione 1.6.0 o superiore)
-            const scalar = 3;
-            const cuore = confetti.shapeFromPath({ 
-                path: 'M 10 30 C 10 30 0 20 0 10 C 0 0 10 0 10 0 C 10 0 20 0 20 10 C 20 20 10 30 10 30',
-                matrix: [0.03, 0, 0, 0.03, -0.3, -0.45] // Serve per ridimensionare e centrare il disegno del cuore
-            });
+    // 2. Esplosione di CUORI usando le emoji (Metodo garantito)
+    // Creiamo la forma partendo dal testo
+    const scali = 3;
+    const formaCuore = confetti.shapeFromText({ text: '❤️', scalar: scali });
 
-            confetti({
-                shapes: [cuore],
-                particleCount: 50,
-                spread: 120,
-                origin: { y: 0.7 },
-                scalar: scalar,
-                colors: ['#ff0000', '#ff69b4']
-            });
-        });
-    </script>
+    confetti({
+        shapes: [formaCuore],
+        particleCount: 40,
+        spread: 100,
+        origin: { y: 0.7 },
+        scalar: scali
+    });
+});
+</script>
 </body>
 </html>
