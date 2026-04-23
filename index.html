@@ -11,25 +11,24 @@
             text-align: center;
             background-color: #f4f4f9;
             margin: 0;
-            height: 100vh;
+            height: 100vh; /* Alto esattamente quanto lo schermo */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow: hidden; /* Niente barre di scorrimento, mai! */
         }
 
         h1 {
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             padding: 0 20px;
             color: #333;
         }
 
-        /* Area dove i bottoni vivono */
-        .area-gioco {
-            position: relative;
-            width: 100%;
-            height: 100px;
+        /* Contenitore iniziale per tenerli vicini e centrati */
+        .container-bottoni {
+            display: flex;
+            gap: 20px;
         }
 
         button {
@@ -39,24 +38,19 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            position: absolute; /* Entrambi absolute per controllo totale */
-            transition: all 0.2s ease;
+            transition: left 0.2s ease, top 0.2s ease; /* Animazione fluida */
         }
 
         #bottoneVero {
             background-color: #28a745;
             color: white;
-            /* Posizionato a sinistra del centro */
-            left: calc(50% - 110px);
-            top: 0;
+            z-index: 10;
         }
 
         #bottoneDispettoso {
             background-color: #dc3545;
             color: white;
-            /* Posizionato a destra del centro */
-            left: calc(50% + 10px);
-            top: 0;
+            z-index: 20;
         }
     </style>
 </head>
@@ -64,7 +58,7 @@
 
     <h1>Lo sai che sei il mio amour bello bellissimo? EH!!</h1>
     
-    <div class="area-gioco">
+    <div class="container-bottoni">
         <button id="bottoneVero">SI</button>
         <button id="bottoneDispettoso">NO</button>
     </div>
@@ -75,32 +69,37 @@
         const noBtn = document.getElementById('bottoneDispettoso');
         const siBtn = document.getElementById('bottoneVero');
 
-        // FUNZIONE PER FAR SCAPPARE IL BOTTONE
+        // --- LA MAGIA DEL BOTTONE CHE SCAPPA (DENTRO LO SCHERMO) ---
         noBtn.addEventListener('mouseover', () => {
-            // Calcoliamo limiti sicuri (non troppo vicini ai bordi)
-            const padding = 50;
-            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+            // Lo svincoliamo dal contenitore e lo leghiamo allo schermo visibile
+            noBtn.style.position = 'fixed';
 
-            // Genera nuove coordinate
-            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+            // Margine di sicurezza per non farlo sbattere contro i bordi (es. 20 pixel)
+            const margine = 20;
 
-            // Muovi il bottone in tutto lo schermo
+            // Calcoliamo lo spazio massimo disponibile sottraendo la grandezza del bottone e il margine
+            const maxX = window.innerWidth - noBtn.offsetWidth - margine;
+            const maxY = window.innerHeight - noBtn.offsetHeight - margine;
+
+            // Generiamo coordinate sicure tra il margine e il limite massimo
+            const randomX = Math.max(margine, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(margine, Math.floor(Math.random() * maxY));
+
+            // Applichiamo le coordinate calcolate
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
         });
 
-        // FUNZIONE PER I CUORI
+        // --- L'AMORE TRIONFA (CUORI) ---
         siBtn.addEventListener('click', () => {
-            // Esplosione Coriandoli
+            // Coriandoli Normali
             confetti({
                 particleCount: 100,
                 spread: 70,
                 origin: { y: 0.6 }
             });
 
-            // Esplosione Cuori (Funzionerà grazie alla versione 1.9.3)
+            // Cuori Grandi
             const scalar = 3;
             const cuore = confetti.shapeFromText({ text: '❤️', scalar });
 
@@ -111,6 +110,11 @@
                 origin: { y: 0.7 },
                 scalar: scalar
             });
+        });
+
+        // Se lo beccano per sbaglio
+        noBtn.addEventListener('click', () => {
+            alert("Hai barato! Ma sei comunque il mio amour! ❤️");
         });
     </script>
 </body>
