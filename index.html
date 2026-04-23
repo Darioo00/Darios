@@ -85,24 +85,34 @@
 
     <!-- Aggiungiamo la libreria dei confetti (puoi anche scaricarla e includerla localmente) -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <script>
-   const bottone2 = document.getElementById('bottoneVero');
+<script>
+const bottone2 = document.getElementById('bottoneVero');
 
 bottone2.addEventListener('click', () => {
-    // Coriandoli normali subito
-    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    
+    // 1. Esplosione classica (Coriandoli colorati)
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ff0000', '#fe019a', '#ffcccb'] // Colori a tema amore
+    });
 
-    // Cuori dopo 200 millisecondi
-    setTimeout(() => {
-        const cuore = confetti.shapeFromText({ text: '❤️', scalar: 3 });
-        confetti({
-            shapes: [cuore],
-            particleCount: 50,
-            scalar: 3,
-            origin: { y: 0.7 }
-        });
-    }, 200);
+    // 2. Esplosione di CUORI (Metodo infallibile con SVG)
+    // Questo disegna la forma del cuore matematicamente
+    const carrettinoCuore = confetti.shapeFromPath({ 
+        path: 'M0 10 C0 6, 3 2, 10 2 C15 2, 20 6, 20 10 C20 15, 15 20, 10 25 C5 20, 0 15, 0 10' 
+    });
+
+    confetti({
+        shapes: [carrettinoCuore],
+        particleCount: 50,
+        spread: 120,
+        origin: { y: 0.7 },
+        scalar: 2,           // Li rende belli grandi
+        colors: ['#ff0000']  // Cuori rossi
+    });
 });
-    </script>
+</script>
 </body>
 </html>
