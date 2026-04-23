@@ -7,36 +7,56 @@
     
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            margin-top: 50px;
             background-color: #f4f4f9;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Centra tutto verticalmente nel browser */
             overflow: hidden; 
         }
-        
-        #bottoneDispettoso {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #dc3545;
-            color: white;
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        /* Contenitore per tenere i bottoni vicini all'inizio */
+        .container-bottoni {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 50px;
+            position: relative;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transition: top 0.15s, left 0.15s; 
+            transition: transform 0.1s;
         }
 
         #bottoneVero {
-            padding: 10px 20px;
-            font-size: 16px;
             background-color: #28a745;
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 20px;
+            z-index: 10;
+        }
+
+        #bottoneDispettoso {
+            background-color: #dc3545;
+            color: white;
+            /* Inizialmente segue il flusso normale, poi diventerà absolute via JS */
+            position: relative; 
+            transition: top 0.2s, left 0.2s;
         }
     </style>
 </head>
@@ -44,48 +64,59 @@
 
     <h1>Lo sai che sei il mio amour bello bellissimo? EH!!</h1>
     
-    <button id="bottoneVero">SI</button>
-    <button id="bottoneDispettoso">NO</button>
-
-    <script>
-        const bottone = document.getElementById('bottoneDispettoso');
-        bottone.addEventListener('mouseover', function() {
-            const larghezzaSchermo = window.innerWidth - 150;
-            const altezzaSchermo = window.innerHeight - 50;
-            const nuovaPosizioneX = Math.floor(Math.random() * larghezzaSchermo);
-            const nuovaPosizioneY = Math.floor(Math.random() * altezzaSchermo);
-            bottone.style.left = nuovaPosizioneX + 'px';
-            bottone.style.top = nuovaPosizioneY + 'px';
-        });
-    </script>
+    <div class="container-bottoni">
+        <button id="bottoneVero">SI</button>
+        <button id="bottoneDispettoso">NO</button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
     <script>
-const bottone2 = document.getElementById('bottoneVero');
+        const noBtn = document.getElementById('bottoneDispettoso');
+        const siBtn = document.getElementById('bottoneVero');
 
-bottone2.addEventListener('click', () => {
-    
-    // 1. Esplosione di coriandoli normali
-    confetti({
-        particleCount: 70,
-        spread: 70,
-        origin: { y: 0.6 }
-    });
+        // --- LOGICA DEL BOTTONE CHE SCAPPA ---
+        noBtn.addEventListener('mouseover', function() {
+            // Al primo passaggio del mouse, lo rendiamo "absolute" così può muoversi ovunque
+            if (noBtn.style.position !== 'absolute') {
+                noBtn.style.position = 'absolute';
+            }
 
-    // 2. Esplosione di CUORI usando le emoji (Metodo garantito)
-    // Creiamo la forma partendo dal testo
-    const scali = 3;
-    const formaCuore = confetti.shapeFromText({ text: '❤️', scalar: scali });
+            // Calcolo posizioni casuali
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
 
-    confetti({
-        shapes: [formaCuore],
-        particleCount: 40,
-        spread: 100,
-        origin: { y: 0.7 },
-        scalar: scali
-    });
-});
-</script>
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        });
+
+        // --- LOGICA DEI CUORI (CORRETTA) ---
+        siBtn.addEventListener('click', () => {
+            // Coriandoli colorati
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            // Esplosione di CUORI
+            const scalar = 3;
+            const cuore = confetti.shapeFromText({ text: '❤️', scalar });
+
+            confetti({
+                shapes: [cuore],
+                particleCount: 50,
+                spread: 120,
+                origin: { y: 0.7 },
+                scalar: scalar
+            });
+        });
+
+        // Se riescono a cliccare il NO (da tastiera o rapidità estrema)
+        noBtn.addEventListener('click', () => {
+            alert("Ninja! Ma tanto so che volevi premere SI! ❤️");
+        });
+    </script>
+
 </body>
 </html>
