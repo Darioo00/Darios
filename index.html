@@ -89,25 +89,19 @@
    const bottone2 = document.getElementById('bottoneVero');
 
 bottone2.addEventListener('click', () => {
-    // A. Esplosione di coriandoli classici
-    confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 }
-    });
+    // Coriandoli normali subito
+    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
 
-    // B. Esplosione di CUORI
-    // Nota: Usiamo scalar per la dimensione e i colori per i cuori
-    const scalar = 2;
-    const cuore = confetti.shapeFromText({ text: '❤️', scalar });
-
-    confetti({
-        shapes: [cuore],
-        particleCount: 40,
-        spread: 100,
-        origin: { y: 0.7 },
-        scalar
-    });
+    // Cuori dopo 200 millisecondi
+    setTimeout(() => {
+        const cuore = confetti.shapeFromText({ text: '❤️', scalar: 3 });
+        confetti({
+            shapes: [cuore],
+            particleCount: 50,
+            scalar: 3,
+            origin: { y: 0.7 }
+        });
+    }, 200);
 });
     </script>
 </body>
